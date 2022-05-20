@@ -1,6 +1,6 @@
 from contextlib import closing
-from db.engine import db_session
-from db.db import Noticia, Autor, Assunto
+from database.engine import db_session
+from database.db import Noticia, Autor, Assunto
 from flask import jsonify
 
 class Noticias:
