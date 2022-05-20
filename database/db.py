@@ -12,7 +12,7 @@ class Autor(Base):
 class Assunto(Base):
   __tablename__ = "assuntos"
   id = Column(Integer, primary_key=True)
-  nome = Column(String(50), nullable= False)
+  nome = Column(String(50), nullable=False)
 
 class Noticia(Base):
   __tablename__ = "noticias"
