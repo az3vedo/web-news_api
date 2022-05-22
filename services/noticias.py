@@ -22,6 +22,15 @@ class Noticias:
       for result in query:
         response.append(dict(zip(header,result)))
       return jsonify(response)
+
+  def findByAssunto(assunto_id):
+    with closing(db_session):
+      query = db_session.query(Noticia.titulo, Noticia.conteudo, Autor.nome, Assunto.nome).filter_by(id_assunto = assunto_id).join(Autor, Assunto).all()
+      header = ["titulo", "conteudo", "autor", "assunto"]
+      response = []
+      for result in query:
+        response.append(dict(zip(header,result)))
+      return jsonify(response)
   
   def seed_db():
     with closing(db_session):
