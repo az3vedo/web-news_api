@@ -22,5 +22,5 @@ class Noticia(Base):
   conteudo = Column(Text, nullable=False)
   id_autor = Column(Integer, ForeignKey("autores.id"), nullable=False)
 
-#Base.metadata.create_all(db_engine)
+Base.metadata.create_all(db_engine)
 
