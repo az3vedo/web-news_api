@@ -4,6 +4,11 @@ from services.assuntos import Assuntos
 
 app = Flask(__name__)
 
+@app.route('/')
+def seed():
+    Noticias.seed_db()
+    return "Banco populado"
+
 @app.route('/status/')
 def health_check():
     return "app is running"

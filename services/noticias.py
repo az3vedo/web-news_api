@@ -31,3 +31,21 @@ class Noticias:
       for result in query:
         response.append(dict(zip(header,result)))
       return jsonify(response)
+  
+  def seed_db():
+    with closing(db_session):
+      autor = Autor(nome='Gabriel')
+      assunto1 = Assunto(nome='Esportes')
+      assunto2 = Assunto(nome='Astronomia')
+      n1 = Noticia(conteudo='Foi descoberta uma nova estrela', titulo='Brilha-brilha', id_autor=1, id_assunto=2)
+      n2 = Noticia(conteudo='Time perde grande patrocínio após se enolver em polêmica', titulo='Bola fora', id_autor=1, id_assunto=1)
+      n3 = Noticia(conteudo='natação tem grande destaque nas olimpíadas', titulo='Nadando com a maré', id_autor=1, id_assunto=1)
+      n4 = Noticia(conteudo='Gramados de grandes jogos passarão a ser azuis no mês de novembro em campanha', titulo='Futbol azul', id_autor=1, id_assunto=1)
+      db_session.add(autor)
+      db_session.add(assunto1)
+      db_session.add(assunto2)
+      db_session.add(n1)
+      db_session.add(n2)
+      db_session.add(n3)
+      db_session.add(n4)
+      db_session.commit()
