@@ -2,7 +2,7 @@ from contextlib import closing
 from database.engine import db_session
 from database.db import Noticia, Autor, Assunto
 from flask import jsonify
-
+ 
 class Noticias:
   def findAll():
     with closing(db_session):
@@ -31,6 +31,41 @@ class Noticias:
       for result in query:
         response.append(dict(zip(header,result)))
       return jsonify(response)
+
+  def addNoticia(request):
+    with closing(db_session):
+      noticia = Noticia(
+      conteudo=request['conteudo'], 
+      titulo=request['titulo'], 
+      id_autor=int(request['autor']), 
+      id_assunto=int(request['assunto']))
+      db_session.add(noticia)
+      db_session.commit()
+    return({"message": "Notícia criada"})
+
+  def deleteNoticia(request):
+    with closing(db_session):
+      noticia = Noticia(
+      id_noticia=int(request['id']))
+      db_session.delete(noticia)
+      db_session.commit()
+    return({"message": "Notícia deletada"})
+
+  def updateNoticia(request):
+    with closing(db_session):
+      noticia = Noticia(
+        titulo=request['titulo'],
+        conteudo=request['conteudo'],
+        id_autor=int(request['autor']), 
+        id_assunto=int(request['assunto'])
+        )
+      header = ["titulo", "conteudo", "id_autor", "id_assunto"]
+      response = []
+      for field in header:
+        if (noticia[field] == ''):
+          continue
+        # Lógica para atualizar aqui
+      return jsonify({"message": "Notícia autalizada"})
   
   def seed_db():
     with closing(db_session):
