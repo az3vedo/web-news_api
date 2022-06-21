@@ -6,4 +6,4 @@ except:
 	env = "production"
 
 os.system('pip install -r requirements.txt')
-os.system('flask run --port 5100')
+os.system('gunicorn app:app -b 0.0.0.0:5100')
