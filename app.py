@@ -6,7 +6,6 @@ from services.autores import Autores
 
 app = Flask(__name__)
 cors = CORS(app)
-app.config['CORS_HEADERS'] = 'Content-Type'
 
 @app.route('/')
 def seed():
@@ -36,6 +35,7 @@ def find_noticias_by_assunto(id):
 @app.route('/noticias/add/', methods=["POST"])
 def add_noticia():
     request_data = request.get_json()
+    print(request_data)
     return Noticias.addNoticia(request_data)
 
 @app.route('/assunto/add/', methods=["POST"])
