@@ -2,7 +2,7 @@ from contextlib import closing
 from database.engine import db_session
 from database.db import Noticia, Autor, Assunto
 from flask import jsonify
-
+ 
 class Noticias:
   def findAll():
     with closing(db_session):
@@ -16,11 +16,9 @@ class Noticias:
   
   def findById(id):
     with closing(db_session):
-      query = db_session.query(Noticia.titulo, Noticia.conteudo, Autor.nome, Assunto.nome).filter_by(id = id).join(Autor, Assunto).all()
-      header = ["titulo", "conteudo", "autor", "assunto"]
-      response = []
-      for result in query:
-        response.append(dict(zip(header,result)))
+      query = db_session.query(Noticia.id, Noticia.titulo, Noticia.conteudo, Autor.nome, Assunto.nome).filter_by(id = id).join(Autor, Assunto).first()
+      header = ["id", "titulo", "conteudo", "autor", "assunto"]
+      response = dict(zip(header,query))
       return jsonify(response)
 
   def findByAssunto(assunto_id):
@@ -31,6 +29,40 @@ class Noticias:
       for result in query:
         response.append(dict(zip(header,result)))
       return jsonify(response)
+
+  def addNoticia(request):
+    with closing(db_session):
+      noticia = Noticia(
+      conteudo=request['conteudo'], 
+      titulo=request['titulo'], 
+      id_autor=int(request['autor']), 
+      id_assunto=int(request['assunto']))
+      db_session.add(noticia)
+      db_session.commit()
+    return({"message": "Notícia criada"})
+
+  def deleteNoticia(request):
+    with closing(db_session):
+      query = db_session.query(Noticia).filter_by(id=int(request['id'])).first()
+      db_session.delete(query)
+      db_session.commit()
+    return({"message": "Notícia deletada"})
+
+  def editNoticia(request):
+    with closing(db_session):
+      noticia = {
+        "titulo": request['titulo'],
+        "conteudo": request['conteudo']
+      }
+      for field in noticia.keys():
+        if (noticia[field] == ''):
+          del noticia[field]
+      if (noticia=={}):
+        return jsonify({"message": "Nenhum parametro a ser atualizado"})
+      update = db_session.query(Noticia).filter(Noticia.id==int(request['id'])).update(noticia)
+      db_session.commit()
+      return jsonify({"message": "Notícia autalizada"})
+
   
   def seed_db():
     with closing(db_session):
